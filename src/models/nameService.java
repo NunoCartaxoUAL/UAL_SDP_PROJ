@@ -1,4 +1,4 @@
-package controllers;
+package models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,28 +22,6 @@ public class nameService {
         return nameTable;
     }
 
-    public String createUser(String name , Integer pin){
-        if (userExists(name)){
-            System.out.println("This name Already exists.");
-            return "This name Already exists.";
-        }else if (isPinRegistered(pin)){
-            System.out.println("This pin is Already registered");
-            return "This pin is Already registered";
-        }else if(8000>pin || pin>8010){
-            System.out.println("pin invalid, please choose between 8000-8010");
-            return "pin invalid, please choose between 8000-8010";
-        }else{
-            System.out.println("User Created : "+name+" "+ pin);
-            this.nameTable.put(name,pin);
-            return "User Created : "+name+" "+ pin;
-        }
-    }
-
-
-    public Integer getPin(String name){
-        return this.nameTable.get("name");
-    }
-
     private void readNamesFile(String path){
         fi = new File("src/names.csv");
         //Create file if the file doesnt exist
@@ -62,7 +40,7 @@ public class nameService {
                 String data = myReader.nextLine();
                 String name = data.split(",")[0];
                 Integer pin = Integer.parseInt(data.split(",")[1]);
-                this.createUser(name,pin);
+                this.nameTable.put(name,pin);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -71,10 +49,10 @@ public class nameService {
         }
     }
 
-    private Boolean userExists(String name){
+    public Boolean userExists(String name){
         return this.nameTable.get(name) != null;
     }
-    private Boolean isPinRegistered(Integer pin){
+    public Boolean isPinRegistered(Integer pin){
         return this.nameTable.containsValue(pin);
     }
 }
