@@ -1,23 +1,20 @@
 package views;
-import models.registerUser;
+import controllers.registerUser;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Hashtable;
-import java.util.Map;
+import java.io.IOException;
 
 public class registerUserGUI extends JFrame{
     private JPanel registerUserPanel;
     private JTextField userNameTxt;
     private JTextField pinTxt;
     private JButton registerUserTxt;
-    private JLabel msgTxt;
+    public JLabel msgTxt;
     private JPanel panel2;
     private JButton rememberPinBtn;
-
     private registerUser rU;
 
     public registerUserGUI(registerUser rU) {
@@ -46,11 +43,10 @@ public class registerUserGUI extends JFrame{
                 if (name == ""){
                     msgTxt.setText("Please insert username to remember the pin to");
                 }else {
-                    try{
-                        int pin = rU.getPin(name);
-                        msgTxt.setText("The pin to the user "+name+" is "+pin);
-                    }catch (Exception exception){
-                        msgTxt.setText("This name is not registered in the name Service");
+                    try {
+                        rU.rememberPin(name);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
 
                 }
@@ -63,14 +59,8 @@ public class registerUserGUI extends JFrame{
         String pintxt= pinTxt.getText();
         int pin=0;
         try {
-            pin = Integer.parseInt(pintxt);
             if (name !="" && pinTxt.getText() != ""){
-                String response = rU.createUser(name,pin);
-                msgTxt.setText(response);
-                if(response.contains("Created")){
-                    userNameTxt.setText("");
-                    pinTxt.setText("");
-                }
+                rU.registerNamePin(name,pintxt);
             }else if (name !=""){
                 msgTxt.setText("please fill in the username");
             }else{

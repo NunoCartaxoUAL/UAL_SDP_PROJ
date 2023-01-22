@@ -18,7 +18,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="51a21" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+          <component id="51a21" class="javax.swing.JTextField" binding="pinTextField">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -26,15 +26,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="4d10f" class="javax.swing.JTextField" binding="textField2" default-binding="true">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="679bb" class="javax.swing.JButton" binding="button1" default-binding="true">
+          <component id="679bb" class="javax.swing.JButton" binding="validateBTN">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -47,15 +39,15 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Label"/>
+              <text value="pinLabel"/>
             </properties>
           </component>
-          <component id="f265b" class="javax.swing.JLabel">
+          <component id="d84e0" class="javax.swing.JLabel" binding="validationLabel">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Label"/>
+              <text value=""/>
             </properties>
           </component>
         </children>
@@ -122,6 +114,7 @@
               <component id="c06ae" class="javax.swing.JTextArea" binding="chatArea">
                 <constraints/>
                 <properties>
+                  <editable value="false"/>
                   <lineWrap value="true"/>
                   <text value=""/>
                   <wrapStyleWord value="true"/>

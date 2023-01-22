@@ -1,23 +1,31 @@
 package views;
 
+import controllers.chatService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.SocketException;
 
 public class chatGUI extends JFrame{
-    private JButton button1;
-    private JTextArea chatArea;
+    private JButton validateBTN;
+    public JTextArea chatArea;
     private JPanel chatPanel;
-    private JPanel loginPanel;
-    private JPanel loggedPanel;
-    private JTextField textField1;
-    private JTextField textField2;
+    public JPanel loginPanel;
+    public JPanel loggedPanel;
+    private JTextField pinTextField;
     private JButton msgSend;
     private JTextField msgArea;
     private JTextField toArea;
+    public JLabel validationLabel;
+    private chatService cS;
+    public String userName;
+    public String messageToSend;
 
-    public chatGUI(){
+    public chatGUI(chatService cS){
+        this.cS = cS;
         setSize(300,500);
         this.setTitle("Chat Service");
         this.setResizable(false);
@@ -26,20 +34,50 @@ public class chatGUI extends JFrame{
         Toolkit toolKit = getToolkit();
         Dimension size = toolKit.getScreenSize();
         setLocation(size.width/2 - getWidth()/2-200, size.height/2 - getHeight()/2+40);
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chatArea.append("test\n");
-            }
-        });
         validate();
         this.setVisible(true);
-        button1.addActionListener(new ActionListener() {
+
+        validateBTN.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loggedPanel.setVisible(true);
-                loginPanel.setVisible(false);
+                cS.start();
+                String pin = pinTextField.getText();
+                try {
+                    cS.validatePin(pin);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
+    }
+    public void addMsg(String msg){
+        chatArea.append(msg);
+    }
+    public void newChatService(Integer port) throws SocketException {
+        this.cS = new chatService(port);
+        this.cS.setGUI(this);
+        this.cS.setUsername(this.userName);
+        synchronized (this.cS){
+            this.cS.start();
+
+        }
+        msgSend.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messageToSend = msgArea.getText();
+                msgArea.setText("");
+                String recievers[] = toArea.getText().split(",");
+                for (String reciever: recievers) {
+                    try {
+                        cS.getPin(reciever);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                toArea.setText("");
+
+            }
+        });
+
     }
 }

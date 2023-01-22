@@ -1,6 +1,6 @@
 package views;
 
-import models.nameService;
+import controllers.nameService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -36,6 +36,7 @@ public class nameServiceGUI extends JFrame{
         validate();
         this.setVisible(true);
     }
+
     private void nameServiceTable() {
         String[] columnNames = {"Name", "pin"};
         Object[][] data = {
