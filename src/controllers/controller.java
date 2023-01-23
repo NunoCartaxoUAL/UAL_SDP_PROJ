@@ -7,6 +7,7 @@ import views.registerUserGUI;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.SocketException;
 
 public class controller {
     public controller() throws IOException {
@@ -16,25 +17,29 @@ public class controller {
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize theme. Using fallback." );
         }
-        nameService nS = new nameService(8888);
-        nameServiceGUI nsGUI = new nameServiceGUI(nS);
-        nS.start();
+        startNameService(8888);
+        startRegisterUser(7777);
+        startChatService(7000);
+        startChatService(7001);
+        startChatService(7002);
 
-        registerUser rU = new registerUser(7777); //TODO retirar o nS e por portas
+
+    }
+    public void startNameService(int port) throws SocketException {
+        nameService nS = new nameService(port);
+        nameServiceGUI nsGUI = new nameServiceGUI(nS);
+        nS.setGUI(nsGUI);
+        nS.start();
+    }
+    public void startRegisterUser(int port) throws SocketException {
+        registerUser rU = new registerUser(port);
         registerUserGUI rUGui = new registerUserGUI(rU);
         rU.setGUI(rUGui);
         rU.start();
-
-        chatService c1 = new chatService(7000);//TODO retirar o nS e por portas
-        chatService c2 = new chatService(7001);
-        chatService c3 = new chatService(7002);
+    }
+    public void startChatService(int port) throws SocketException {
+        chatService c1 = new chatService(port);
         chatGUI cg1 = new chatGUI(c1);
         c1.setGUI(cg1);
-        chatGUI cg2 = new chatGUI(c2);
-        c2.setGUI(cg2);
-        chatGUI cg3 = new chatGUI(c3);
-        c3.setGUI(cg3);
-
-
     }
 }

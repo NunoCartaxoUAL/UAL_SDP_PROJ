@@ -1,10 +1,10 @@
 package controllers;
 
 import models.socket;
+import views.nameServiceGUI;
+import views.registerUserGUI;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -15,72 +15,93 @@ public class nameService extends Thread{
     private File fi;
     private Integer port;
     private socket sock;
+    private nameServiceGUI GUI;
+
     public nameService(Integer port) throws SocketException {
         this.nameTable = new Hashtable<String, Integer>();
         readNamesFile("src/names.csv");
         this.port = port;
         this.sock=new socket(port);
     }
+    public void setGUI(nameServiceGUI GUI) {
+        this.GUI = GUI;
+    }
 
     public void run(){
         while(true) {
             String res[] = sock.receiveDP().split("<sep>");
             String type = res[0];
+            String name = "";
+            String pin = "";
+            String from = "";
             switch (type){
                 case "v":
-                    String pin = res[1];
-                    String from = res[2];
-                    try {
-                        this.respondToChatService("valid",pin,from);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    pin = res[1];
+                    from = res[2];
+                    if (isPinRegistered(Integer.parseInt(pin))){
+                        try {
+                            this.respondToChatService("valid",pin,from);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        try {
+                            this.respondToChatService("invalid",pin,from);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
+                    pin = "";
+                    from = "";
                     break;
                 case "r":
                     String user[]= res[1].split(",");
-                    Integer pin1 = Integer.parseInt(user[1]);
+                    pin = user[1];
                     try {
                         if (userExists(user[0])){
                             respondForRegister("NameExists",null,res[2]);
-                        }else if(isPinRegistered(pin1)){
+                        }else if(isPinRegistered(Integer.parseInt(pin))){
                             respondForRegister("PinExists",null,res[2]);
-                        }else if(pin1<8000 || 8010<pin1){
+                        }else if(Integer.parseInt(pin)<8000 || 8010<Integer.parseInt(pin)){
                             respondForRegister("PinInvalid",null,res[2]);
                         }else {
                             respondForRegister("UserCreated",res[1],res[2]);
                             this.nameTable.put(user[0],Integer.parseInt(user[1]));
+                            this.GUI.loadTable();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    pin = "";
                     break;
                 case "p":
-                    String name1 = res[1];
+                    name = res[1];
                     try {
-                        if (!userExists(name1)){
+                        if (!userExists(name)){
                             respondForRemember("UserDoesntExist",null,res[2]);
                         }else {
-                            respondForRemember("PinRemembered",String.valueOf(getPin(name1)),res[2]);
+                            respondForRemember("PinRemembered",String.valueOf(getPin(name)),res[2]);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    name="";
                     break;
                 case "g":
-                    String name = res[1];
-                    String from2 = res[2];
+                    name = res[1];
+                    from = res[2];
                     try {
-                        this.respondForPin(name,from2);
+                        this.respondForPin(name,from);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    from = "";
+                    name="";
                     break;
                 default:
-                    System.out.println("never works");
             }
-            System.out.println(res[0]);
-            System.out.println(res[1]);
-            System.out.println(res[2]);
+
 
         }
     }
@@ -90,7 +111,7 @@ public class nameService extends Thread{
         sock.sendDP(adr,msg);
     }
     private void respondForRemember(String status,  String pin, String from) throws IOException {
-        String msg = "p<sep>"+pin;
+        String msg = "p<sep>"+status+"<sep>"+pin;
         int adr= Integer.parseInt(from);
         sock.sendDP(adr,msg);
     }
@@ -157,5 +178,20 @@ public class nameService extends Thread{
     }
     public Boolean isPinRegistered(Integer pin){
         return this.nameTable.containsValue(pin);
+    }
+
+    public void saveToCsv() throws IOException {
+        FileWriter writer;
+        writer = new FileWriter("src/names.csv", false);  //True = Append to file, false = Overwrite
+        for (Map.Entry<String, Integer> entry : nameTable.entrySet()) {
+
+            writer.write(entry.getKey());
+            writer.write(",");
+            writer.write(entry.getValue().toString());
+            writer.write("\r\n");
+        }
+
+        System.out.println("Write success!");
+        writer.close();
     }
 }

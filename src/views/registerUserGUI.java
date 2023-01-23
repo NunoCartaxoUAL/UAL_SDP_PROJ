@@ -25,30 +25,41 @@ public class registerUserGUI extends JFrame{
         add(registerUserPanel);
         userNameTxt.setToolTipText("Username");
         pinTxt.setToolTipText("pin");
+        setupBtns();
         validate();
         Toolkit toolKit = getToolkit();
         Dimension size = toolKit.getScreenSize();
         setLocation(size.width/2 - getWidth()/2 -200, size.height/2 - getHeight()-200);
         this.setVisible(true);
+
+    }
+    private void setupBtns(){
         registerUserTxt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                regUser();
+                try {
+                    Integer.parseInt(pinTxt.getText());
+                    regUser();
+                }catch (Exception exception){
+                    msgTxt.setText("Please insert a number in the pin text field");
+                }
+
             }
         });
         rememberPinBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = userNameTxt.getText();
-                if (name == ""){
+                if (name.equals("")){
                     msgTxt.setText("Please insert username to remember the pin to");
-                }else {
+                }else
+                {
+
                     try {
-                        rU.rememberPin(name);
+                        rU.sendRememberPin(name);
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-
                 }
 
             }
@@ -60,7 +71,7 @@ public class registerUserGUI extends JFrame{
         int pin=0;
         try {
             if (name !="" && pinTxt.getText() != ""){
-                rU.registerNamePin(name,pintxt);
+                rU.sendRegisterNamePin(name,pintxt);
             }else if (name !=""){
                 msgTxt.setText("please fill in the username");
             }else{

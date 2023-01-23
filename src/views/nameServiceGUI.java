@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -26,7 +27,12 @@ public class nameServiceGUI extends JFrame{
         refreshBTN.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadTable();
+                //loadTable();
+                try {
+                    nS.saveToCsv();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         this.add(nameServicePanel);
@@ -55,7 +61,7 @@ public class nameServiceGUI extends JFrame{
         //scrollPane = new JScrollPane(nsTable);
         //this.add(scrollPane, BorderLayout.EAST);
     }
-    private void loadTable(){
+    public void loadTable(){
         Hashtable<String, Integer> entrys = nS.getNameTable();
         DefaultTableModel model = (DefaultTableModel) nsTable.getModel();
         model.setRowCount(0); //clear the name

@@ -24,8 +24,6 @@ public class chatService extends Thread{
     public void run(){
         while(true) {
             String res[] = sock.receiveDP().split("<sep>");
-            System.out.println(res[0]);
-            System.out.println(res[1]);
             String type = res[0];
             switch (type){
                 case "c":

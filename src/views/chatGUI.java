@@ -20,12 +20,14 @@ public class chatGUI extends JFrame{
     private JTextField msgArea;
     private JTextField toArea;
     public JLabel validationLabel;
+    private JLabel pinLabel;
     private chatService cS;
     public String userName;
-    public String messageToSend;
+    public String messageToSend; //temporarily stores the msg to send so i can clear the text field and not send "" for the next names on the list
 
     public chatGUI(chatService cS){
         this.cS = cS;
+        cS.start();
         setSize(300,500);
         this.setTitle("Chat Service");
         this.setResizable(false);
@@ -34,13 +36,14 @@ public class chatGUI extends JFrame{
         Toolkit toolKit = getToolkit();
         Dimension size = toolKit.getScreenSize();
         setLocation(size.width/2 - getWidth()/2-200, size.height/2 - getHeight()/2+40);
+        setupBtns();
         validate();
         this.setVisible(true);
-
+    }
+    public void setupBtns(){
         validateBTN.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cS.start();
                 String pin = pinTextField.getText();
                 try {
                     cS.validatePin(pin);

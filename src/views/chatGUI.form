@@ -24,22 +24,24 @@
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="4 digit pin"/>
+            </properties>
           </component>
           <component id="679bb" class="javax.swing.JButton" binding="validateBTN">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Button"/>
+              <text value="Validate User"/>
             </properties>
           </component>
-          <component id="6f006" class="javax.swing.JLabel">
+          <component id="6f006" class="javax.swing.JLabel" binding="pinLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="pinLabel"/>
+              <text value="pin:"/>
             </properties>
           </component>
           <component id="d84e0" class="javax.swing.JLabel" binding="validationLabel">
@@ -76,7 +78,9 @@
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="message to send"/>
+            </properties>
           </component>
           <component id="62445" class="javax.swing.JTextField" binding="toArea">
             <constraints>
@@ -84,7 +88,9 @@
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="user1,user2,user3 to send to multiple users"/>
+            </properties>
           </component>
           <component id="eeb4f" class="javax.swing.JLabel">
             <constraints>
