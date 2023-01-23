@@ -46,9 +46,10 @@ public class chatGUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String pin = pinTextField.getText();
                 try {
+                    Integer.parseInt(pin);
                     cS.validatePin(pin);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                }catch (Exception exception){
+                    validationLabel.setText("Please insert a number in the pin text field");
                 }
             }
         });
@@ -68,19 +69,21 @@ public class chatGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 messageToSend = msgArea.getText();
-                msgArea.setText("");
-                String recievers[] = toArea.getText().split(",");
-                for (String reciever: recievers) {
-                    try {
-                        cS.getPin(reciever);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                if (!messageToSend.equals("")){
+                    msgArea.setText("");
+                    String recievers[] = toArea.getText().split(",");
+                    for (String reciever: recievers) {
+                        if (!reciever.equals("")){
+                            try {
+                                cS.getPin(reciever);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                     }
+                    toArea.setText("");
                 }
-                toArea.setText("");
-
             }
         });
-
     }
 }
