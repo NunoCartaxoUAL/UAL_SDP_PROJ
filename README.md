@@ -1,6 +1,6 @@
 # Distributed_Parallel_Systems_Project
 
-# project overview
+## project overview
 Chat Application with Distributed Name and Chat Services
 This project was completed as part of a university module on distributed parallel systems. The chat application consists of three modules: NameService, RegisterUser, and ChatService. Each module has a graphical user interface (GUI) and communicates with other modules through sockets. The NameService maps users to four-digit pins, while the RegisterUser module simply registers users in the NameService. Finally, the ChatService allows users to log in with a pin and chat with each other through multicast or direct messages.
 
